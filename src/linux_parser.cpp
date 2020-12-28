@@ -1,10 +1,13 @@
 #include <dirent.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <string>
 #include <vector>
-
+#include <iostream>
 #include "linux_parser.h"
 
+
+//using namespace std;
 using std::stof;
 using std::string;
 using std::to_string;
@@ -89,7 +92,26 @@ long LinuxParser::IdleJiffies() { return 0; }
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return 0; }
+int LinuxParser::TotalProcesses() { 
+  string line;
+  string key;
+  string value;
+  std::ifstream filestream(kProcDirectory+kStatFilename);
+        
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      //std::cout << line<<"\n";
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+         //std::cout << key << " || " << value << "\n\n";
+        if (key == "processes") {
+         
+          return std::stoi(value);
+        }
+      }
+    }
+  }
+  }
 
 // TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() { return 0; }
