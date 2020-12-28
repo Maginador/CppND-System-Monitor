@@ -6,7 +6,7 @@
 int main() {
   System system;
   std::cout<<"\n\n";
-  std::cout << LinuxParser::TotalProcesses()<<"\n\n";
+  std::cout << LinuxParser::MemoryUtilization()<<"\n\n";
 
   //NCursesDisplay::Display(system);
 }
