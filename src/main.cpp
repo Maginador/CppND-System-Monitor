@@ -5,8 +5,8 @@
 
 int main() {
   System system;
-  std::cout<<"\n\n";
-  std::cout << LinuxParser::MemoryUtilization()<<"\n\n";
+  //std::cout<<"\n\n";LinuxParser::Pids();
+  //std::cout << LinuxParser::MemoryUtilization()<<"\n\n";
 
-  //NCursesDisplay::Display(system);
+  NCursesDisplay::Display(system);
 }

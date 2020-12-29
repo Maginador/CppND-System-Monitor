@@ -66,6 +66,7 @@ vector<int> LinuxParser::Pids() {
     }
   }
   closedir(directory);
+  std::cout<<(pids.size());
   return pids;
 }
 
@@ -167,7 +168,17 @@ int LinuxParser::RunningProcesses() { string line;
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Command(int pid) { 
+  string key;
+  string value;
+  string cmd;
+
+  std::ifstream filestream(kProcDirectory+to_string(pid)+kCmdlineFilename);
+        
+  if (filestream.is_open()) {
+    std::getline(filestream,cmd);
+  }
+  return cmd; }
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
