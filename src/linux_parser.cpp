@@ -92,7 +92,7 @@ float LinuxParser::MemoryUtilization() {
          mentotal = std::stof(value);
           
         }
-        return (mentotal - menfree);
+        return 100 * (mentotal - menfree)/mentotal;
       }
     }
   } }
@@ -118,7 +118,23 @@ long LinuxParser::Jiffies() { return 0; }
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { 
+  //use                   14 + 15 + 16 + 17 
+  long uptime=0;
+  string line, value; float utime, stime, cutime, cstime;
+  std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
+  std::getline(filestream,line);
+  std::istringstream linestream(line);
+  for(int i =0; i<18; i++) {
+    linestream >> value;
+    if(i+1 == 14 ) utime = stof(value);
+    else if (i+1 == 15 ) stime = stof(value);
+    else if (i+1 == 16 ) cutime = stof(value);
+    else if (i+1 == 17 ) cstime = stof(value);
+  }
+  //std::cout << stol(value) << "\n";
+  return (utime + stime + cutime + cstime)*sysconf(_SC_CLK_TCK);
+}
 
 // TODO: Read and return the number of active jiffies for the system
 long LinuxParser::ActiveJiffies() { return 0; }
@@ -182,7 +198,25 @@ string LinuxParser::Command(int pid) {
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int pid[[maybe_unused]]) { 
+  string line;
+  string key;
+  string value;
+  std::ifstream filestream(kProcDirectory+std::to_string(pid)+kStatusFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == "VmSize:") {
+          
+          return to_string(stoi(value)/1000);
+        }
+      }
+    }
+  }
+  return string();
+
+ }
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function

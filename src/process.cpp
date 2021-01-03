@@ -36,10 +36,11 @@ bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
 Process::Process(int pid){
     pid_ = pid;
     //TODO : Add CPU Method to Parser
-    cpu_ = 0;
     cmd_ = LinuxParser::Command(pid);
     ram_ = LinuxParser::Ram(pid);
     user_ = LinuxParser::User(pid);
     uptime_ = LinuxParser::UpTime(pid);
+    cpu_ = (float)LinuxParser::ActiveJiffies(pid)/uptime_;
+
 
 }
