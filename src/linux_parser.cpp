@@ -95,7 +95,9 @@ float LinuxParser::MemoryUtilization() {
         return 100 * (mentotal - menfree)/mentotal;
       }
     }
-  } }
+  } 
+  return 0;
+  }
 
 long LinuxParser::UpTime() { 
   string line;
@@ -111,6 +113,7 @@ long LinuxParser::UpTime() {
           return uptime;
         }
       }
+      return 0;
  }
 
 // TODO: Read and return the number of jiffies for the system
@@ -119,8 +122,7 @@ long LinuxParser::Jiffies() { return 0; }
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { 
-  //use                   14 + 15 + 16 + 17 
-  long uptime=0;
+  //use                         14 + 15 + 16 + 17 
   string line, value; float utime, stime, cutime, cstime;
   std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
   std::getline(filestream,line);
@@ -163,6 +165,7 @@ int LinuxParser::TotalProcesses() {
       }
     }
   }
+  return 0;
   }
 
 int LinuxParser::RunningProcesses() { string line;
@@ -180,7 +183,9 @@ int LinuxParser::RunningProcesses() { string line;
         }
       }
     }
-  } }
+  } 
+  return 0;
+  }
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
@@ -269,7 +274,6 @@ string LinuxParser::User(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid) { 
   
-  long uptime=0;
   string line, value;
   std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
   std::getline(filestream,line);
