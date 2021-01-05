@@ -38,13 +38,13 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, kernel;
+  string os, kernel, trash;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> os >> kernel;
+    linestream >> os >> trash >>kernel;
   }
   return kernel;
 }
@@ -77,24 +77,27 @@ float LinuxParser::MemoryUtilization() {
   string value;
   std::ifstream filestream(kProcDirectory+kMeminfoFilename);
   
-  float menfree;
-  float mentotal;
+  long menfree=0;
+  long mentotal=0;
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
      
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
-        if (key == "MenFree:") {
-         menfree = std::stof(value);
+        if (key == "MemFree:") {
+         menfree = std::stol(value);
           
         }
         if (key == "MemTotal:") {
-         mentotal = std::stof(value);
+         mentotal = std::stol(value);
           
         }
-        return 100 * (mentotal - menfree)/mentotal;
+        
       }
+
     }
+
+    return (float)(mentotal - menfree)/mentotal;
   } 
   return 0;
   }
@@ -117,7 +120,29 @@ long LinuxParser::UpTime() {
  }
 
 // TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+float LinuxParser::CPUTilization() { 
+  string line;
+  string key;
+  float user,nice,system,idle,iowait,irq,softirq,steal,guest,guest_nice;
+  std::ifstream filestream(kProcDirectory+kStatFilename);
+        
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key;
+      if (key == "cpu") {
+         linestream >> user >> nice >> system >> idle >> iowait >> irq >> softirq >>steal >> guest >> guest_nice;
+         float idleTime = idle + iowait;
+         float nonIdleTime = user + nice + system + irq + softirq + steal;
+         float guestTime = guest + guest_nice;
+         float total = idleTime + nonIdleTime + guestTime;
+         float result = ( total - idleTime)/total;
+          return result;
+        }
+      }
+    } 
+  return 0;
+}
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
@@ -137,15 +162,6 @@ long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) {
   //std::cout << stol(value) << "\n";
   return (utime + stime + cutime + cstime)*sysconf(_SC_CLK_TCK);
 }
-
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
-
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { 

@@ -1,4 +1,4 @@
 #include "processor.h"
 #include "linux_parser.h"
 
-float Processor::Utilization() { return 0; }
+float Processor::Utilization() { return LinuxParser::CPUTilization(); }
