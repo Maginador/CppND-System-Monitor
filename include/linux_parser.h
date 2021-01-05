@@ -26,7 +26,9 @@ const std::string filterMemoryTotal ("MemTotal:");
 const std::string filterCPU ("cpu");
 const std::string filterProcesses ("processes");
 const std::string filterProcessesRunning ("procs_running");
-const std::string filterRam ("VmSize:");
+//used VmData instead of VmSize following recomendation in the documentation because VmSize represents virtual memory and VmData physical memory (followed mentor review)
+//https://man7.org/linux/man-pages/man5/proc.5.html
+const std::string filterRam ("VmData:");
 const std::string filterUID ("Uid:");
 
 // System
