@@ -6,5 +6,6 @@
 
 int main() {
   System system;
+  //std::cout << LinuxParser::filterPrettyName;
   NCursesDisplay::Display(system);
 }
