@@ -13,7 +13,6 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-// DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
@@ -154,7 +153,8 @@ long LinuxParser::ActiveJiffies(int pid) {
     else if (i+1 == 16 ) cutime = stof(value);
     else if (i+1 == 17 ) cstime = stof(value);
   }
-  return (utime + stime + cutime + cstime)*sysconf(_SC_CLK_TCK);
+
+  return ((utime + stime + cutime + cstime)/sysconf(_SC_CLK_TCK));
 }
 
 int LinuxParser::TotalProcesses() { 
@@ -274,5 +274,5 @@ long LinuxParser::UpTime(int pid) {
   std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
   std::getline(filestream,line);
   std::istringstream linestream(line);
-  for(int i =0; i<23; i++) linestream >> value;
-  return UpTime() - stol(value)/sysconf(_SC_CLK_TCK); }
+  for(int i =0; i<24; i++) linestream >> value;
+  return UpTime() - (stol(value))/sysconf(_SC_CLK_TCK); }
