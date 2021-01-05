@@ -18,7 +18,7 @@ Processor& System::Cpu() { return cpu_; }
 
 vector<Process>& System::Processes() { 
     vector<int> pids = LinuxParser::Pids();
-    for(int i =0; i< pids.size(); i++){
+    for(uint i =0; i< pids.size(); i++){
         processes_.emplace_back(Process(pids[i]));
     }
     return processes_; }
@@ -33,4 +33,4 @@ int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 
 int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
-long int System::UpTime() { LinuxParser::UpTime(); }
+long int System::UpTime() { return LinuxParser::UpTime(); }
