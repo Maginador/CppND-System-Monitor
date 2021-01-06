@@ -94,7 +94,7 @@ float LinuxParser::MemoryUtilization() {
 
     }
 
-    return (float)(mentotal - menfree)/mentotal;
+    return static_cast<float>(mentotal - menfree)/mentotal;
   } 
   return 0;
   }
