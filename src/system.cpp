@@ -22,6 +22,7 @@ vector<Process>& System::Processes() {
     for(uint i =0; i< pids.size(); i++){
         processes_.emplace_back(Process(pids[i]));
     }
+    std::sort(processes_.begin(), processes_.end());
     return processes_; }
 
 std::string System::Kernel() { return LinuxParser::Kernel(); }

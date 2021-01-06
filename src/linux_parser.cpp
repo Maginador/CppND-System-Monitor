@@ -274,5 +274,5 @@ long LinuxParser::UpTime(int pid) {
   std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
   std::getline(filestream,line);
   std::istringstream linestream(line);
-  for(int i =0; i<24; i++) linestream >> value;
+  for(int i =0; i<22; i++) linestream >> value;
   return UpTime() - (stol(value))/sysconf(_SC_CLK_TCK); }
