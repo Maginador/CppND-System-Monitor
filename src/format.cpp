@@ -17,6 +17,5 @@ string Format::ElapsedTime(long seconds) {
     s = seconds_<10? "0" + to_string(seconds_) : to_string(seconds_);
     m = minutes_<10? "0" + to_string(minutes_) : to_string(minutes_);
     h = to_string(hours_);
-    //string result = string(); result = to_string(seconds_);
     string result = h + ":"+m+":"+s;
     return result; }
