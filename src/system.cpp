@@ -18,6 +18,7 @@ Processor& System::Cpu() { return cpu_; }
 
 vector<Process>& System::Processes() { 
     vector<int> pids = LinuxParser::Pids();
+    processes_.clear();
     for(uint i =0; i< pids.size(); i++){
         processes_.emplace_back(Process(pids[i]));
     }
