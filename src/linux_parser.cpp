@@ -206,6 +206,11 @@ string LinuxParser::Command(int pid) {
   if (filestream.is_open()) {
     std::getline(filestream,cmd);
   }
+  if(cmd.size() > 40){
+    cmd.resize(40);
+    cmd += "...";
+
+  }
   return cmd; }
 
 string LinuxParser::Ram(int pid) { 
